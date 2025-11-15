@@ -3,9 +3,44 @@ import java.time.LocalDateTime;
 
 class BankAccount {
     private String ownerName;
+    
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
     private int balance;
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
+
     private LocalDateTime openingDate;
+    
+    public LocalDateTime getOpeningDate() {
+        return openingDate;
+    }
+
+    public void setOpeningDate(LocalDateTime openingDate) {
+        this.openingDate = openingDate;
+    }
+
     private boolean isBlocked;
+
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    public void setBlocked(boolean isBlocked) {
+        this.isBlocked = isBlocked;
+    }
 
     BankAccount(String name) {
         ownerName = name;
@@ -58,6 +93,12 @@ class BankAccount {
         }
     }
 
+    public String toString() {
+         return "Информация о счете:\n" + "Владелец счета: " + getOwnerName() + "\n" + "Баланс счета: "
+                 + getBalance() + "\n" + "Дата открытия счета: " + getOpeningDate() + "\n" + "Счет заблокирован? "
+                 + (isBlocked() ? "Да" : "Нет") + "\n";
+    }
+
 }
 
 public class task1 {
@@ -70,6 +111,8 @@ public class task1 {
         testAcc1.transfer(testAcc2, 1100);
         testAcc1.withdraw(200);
         testAcc1.transfer(testAcc2, 200);
+
+        System.out.println(testAcc1.toString());
     }
 }
 

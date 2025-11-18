@@ -2,6 +2,7 @@ package Теория;
 import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.ArrayList;
+import java.util.Objects;
 
 class BankAccount {
     private String ownerName;
@@ -120,6 +121,24 @@ class BankAccount {
                  + (isBlocked() ? "Да" : "Нет") + "\n";
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true; // сравнение по ссылке
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        BankAccount that = (BankAccount) o;
+
+        // сравнение по номеру счёта
+        return Objects.equals(this.number, that.number);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(number);
+    }
+
 }
 
 public class task1 {
@@ -134,6 +153,9 @@ public class task1 {
         testAcc1.transfer(testAcc2, 200);
 
         System.out.println(testAcc1.toString());
+
+        System.out.println(testAcc1.equals(testAcc2));
+        System.out.println(testAcc1.equals(testAcc1));
     }
 }
 

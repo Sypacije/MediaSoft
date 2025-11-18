@@ -1,5 +1,7 @@
 package Теория;
 import java.time.LocalDateTime;
+import java.util.Random;
+import java.util.ArrayList;
 
 class BankAccount {
     private String ownerName;
@@ -42,11 +44,26 @@ class BankAccount {
         this.isBlocked = isBlocked;
     }
 
+    private ArrayList<Integer> number;
+
+    public ArrayList<Integer> getNumber() {
+        return number;
+    }
+
+    public void setNumber(ArrayList<Integer> number) {
+        this.number = number;
+    }
+
     BankAccount(String name) {
         ownerName = name;
         balance = 0;
         openingDate = LocalDateTime.now();
         isBlocked = false;
+        number = new ArrayList<Integer>();
+        Random dij = new Random();
+        for (int i = 0; i < 8; i++) {
+            number.add(dij.nextInt(10));
+        }
     }
 
     public boolean deposit(int amount) { // пополнение счета
@@ -94,7 +111,11 @@ class BankAccount {
     }
 
     public String toString() {
-         return "Информация о счете:\n" + "Владелец счета: " + getOwnerName() + "\n" + "Баланс счета: "
+        String numString = "";
+        for (int i = 0; i < 8; i++) {
+            numString += Integer.toString(number.get(i));
+        }
+         return "Информация о счете:\n" + "Владелец счета: " + getOwnerName() + "\n" + "Номер счета: " + numString + "\n" + "Баланс счета: "
                  + getBalance() + "\n" + "Дата открытия счета: " + getOpeningDate() + "\n" + "Счет заблокирован? "
                  + (isBlocked() ? "Да" : "Нет") + "\n";
     }

@@ -113,7 +113,7 @@ class BankAccount {
     public String toString() {
         String numString = "";
         for (int i = 0; i < 8; i++) {
-            numString += Integer.toString(number.get(i));
+            numString += Integer.toString(getNumber().get(i));
         }
          return "Информация о счете:\n" + "Владелец счета: " + getOwnerName() + "\n" + "Номер счета: " + numString + "\n" + "Баланс счета: "
                  + getBalance() + "\n" + "Дата открытия счета: " + getOpeningDate() + "\n" + "Счет заблокирован? "

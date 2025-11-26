@@ -1,7 +1,12 @@
 import java.util.Objects;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.stream.*;
+import java.util.stream.Collectors;
 
 class Car implements Comparable<Car> {
     private String carVin;
@@ -98,6 +103,15 @@ class Car implements Comparable<Car> {
 }
 
 public class task2_1 {
+
+    public static void printCarsList(List<Car> list) {
+        System.out.println("\n");
+        for (Car c : list) {
+            System.out.println(c.toString());
+        }
+        System.out.println("\n");
+    }
+
     public static void main(String[] args) {
         HashSet<Car> carsHashSet = new HashSet<>();
         ArrayList<Car> carsArrayList = new ArrayList<>();
@@ -133,16 +147,64 @@ public class task2_1 {
         System.out.println("\n");
         System.out.println("До сортировки:\n");
 
-        for (Car c : carsArrayList) {
-            System.out.println(c.toString());
-        }
+        printCarsList(carsArrayList);
 
         Collections.sort(carsArrayList);
 
-        System.out.println("\nПосле сортировки:\n");
+        System.out.println("После сортировки:");
 
-        for (Car c : carsArrayList) {
-            System.out.println(c.toString());
+        printCarsList(carsArrayList);
+
+        //Задание 2.4 Stream API
+
+        List<Car> carsList = new ArrayList<>();
+
+        carsList.add(car1);
+        carsList.add(car2);
+        carsList.add(car3);
+        carsList.add(car4);
+        carsList.add(car5);
+        carsList.add(car6);
+
+        List<Car> lowMileageCars = carsList.stream()
+        .filter(car -> car.getCarMileage() < 50000)
+        .toList();
+
+        List<Car> carsSortByPrice = carsList.stream()
+        .sorted(Comparator.comparing(Car::getCarPrice).reversed())
+        .toList();
+
+        System.out.println("Три самые дорогие машины:\n");
+
+        carsList.stream()
+        .sorted(Comparator.comparing(Car::getCarPrice).reversed())
+        .limit(3)
+        .forEach(System.out::println);
+
+        double averageMileage = carsList.stream()
+        .mapToInt(Car::getCarMileage) 
+        .average()                     
+        .orElse(0);
+        
+        Map<String, List<Car>> carsByManufacturer = carsList.stream()
+        .collect(Collectors.groupingBy(Car::getCarManufacturer));
+
+        System.out.println("\nПробег меньше 50000:");
+        printCarsList(lowMileageCars);
+
+        System.out.println("Сортировка по цене:");
+        printCarsList(carsSortByPrice);
+
+        System.out.println("Средний пробег всех машин: " + averageMileage + " км\n");
+
+        System.out.println("Автомобили по производителю:\n");
+        
+        for (Map.Entry<String, List<Car>> entry : carsByManufacturer.entrySet()) {
+            String carsString = entry.getValue().stream()
+                .map(Car::toString)                 
+                .collect(Collectors.joining("\n"));
+    
+            System.out.println(entry.getKey() + ": " + carsString + "\n");
         }
     }
 }

@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Comparator;
 
-class Car {
+class FirstCar {
     private int carReleaseYear[] = new int[50];
     private List<String> carModels;
 
@@ -80,7 +80,7 @@ class Car {
 
 public class task2 {
     public static void main(String[] args) {
-        Car testCar = new Car();
+        FirstCar testCar = new FirstCar();
         testCar.setCarReleaseYear();
         testCar.getCarReleaseYearAfter2015();
         testCar.getAverageCarAge();

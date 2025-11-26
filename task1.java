@@ -1,4 +1,3 @@
-package Теория;
 import java.time.LocalDateTime;
 
 class BankAccount {

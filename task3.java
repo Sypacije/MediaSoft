@@ -42,7 +42,6 @@ abstract class Room {
         Random random = new Random();
         this.roomNumber = random.nextInt(99) + 1;
         this.maxPeopleQuantity = random.nextInt(3) + 1;
-        this.oneNightPrice = random.nextInt(10000 - 1000 + 1) + 1000;
         this.isBooked = false;
     }
 
@@ -54,33 +53,66 @@ abstract class Room {
     }
 }
 
+enum Prices {
+    ECONOMY(1500, 2500),
+    STANDARD(3000, 5000),
+    LUX(6000, 9000),
+    ULTRA_LUX(10000, 20000);
+    
+    private final int minPrice;
+    private final int maxPrice;
+    
+    Prices(int minPrice, int maxPrice) {
+        this.minPrice = minPrice;
+        this.maxPrice = maxPrice;
+    }
+    
+    public int getRandomPrice() {
+        Random random = new Random();
+        return random.nextInt(maxPrice - minPrice + 1) + minPrice;
+    }
+    
+    public int getMinPrice() {
+        return minPrice;
+    }
+    
+    public int getMaxPrice() {
+        return maxPrice;
+    }
+}
+
 class EconomyRoom extends Room { 
     public EconomyRoom() {
         super();
+        this.setOneNightPrice(Prices.ECONOMY.getRandomPrice());
     }
 }
 
 abstract class ProRoom extends Room { 
     public ProRoom() {
         super();
+
     }
 }
 
 class StandardRoom extends ProRoom { 
     public StandardRoom() {
         super();
+        this.setOneNightPrice(Prices.STANDARD.getRandomPrice());
     }
 }
 
 class LuxRoom extends ProRoom { 
     public LuxRoom() {
         super();
+        this.setOneNightPrice(Prices.LUX.getRandomPrice());
     }
 }
 
 class UltraLuxRoom extends LuxRoom { 
     public UltraLuxRoom() {
         super();
+        this.setOneNightPrice(Prices.ULTRA_LUX.getRandomPrice());
     }
 }
 
@@ -98,6 +130,10 @@ interface RoomService<T extends Room> {
     void clean(T room);
     void reserve(T room);
     void free(T room);
+}
+
+interface LuxRoomService<T extends LuxRoom> extends RoomService<T> {
+    void foodDelivery(T room);
 }
 
 class HotelRoomService <T extends Room> implements RoomService<T> {
@@ -129,17 +165,37 @@ class HotelRoomService <T extends Room> implements RoomService<T> {
     }
 }
 
+class LuxHotelRoomService <T extends LuxRoom> extends HotelRoomService<T> implements LuxRoomService<T> {
+    
+    @Override
+    public void foodDelivery(T room) {
+        System.out.println("Заказ на доставку еды в комнату " + room.getRoomNumber());
+        
+    }
+}
+
 public class task3 {
     public static void main(String[] args) {
         EconomyRoom ecRoom = new EconomyRoom();
         HotelRoomService<EconomyRoom> serviceForEconomyRoom = new HotelRoomService<>();
         serviceForEconomyRoom.reserve(ecRoom);
-        serviceForEconomyRoom.reserve(ecRoom);
 
         UltraLuxRoom ultraLuxRoom = new UltraLuxRoom();
-        HotelRoomService<UltraLuxRoom> serviceForUltraLuxRoom = new HotelRoomService<>();
+        LuxHotelRoomService<UltraLuxRoom> serviceForUltraLuxRoom = new LuxHotelRoomService<>();
         serviceForUltraLuxRoom.reserve(ultraLuxRoom);
         serviceForUltraLuxRoom.free(ultraLuxRoom);
         serviceForUltraLuxRoom.clean(ultraLuxRoom);
+        serviceForUltraLuxRoom.foodDelivery(ultraLuxRoom);
+
+        LuxRoom luxRoom = new LuxRoom();
+        LuxHotelRoomService<LuxRoom> serviceForLuxRoom = new LuxHotelRoomService<>();
+        serviceForLuxRoom.reserve(luxRoom);
+        serviceForLuxRoom.free(luxRoom);
+        serviceForLuxRoom.clean(luxRoom);
+        serviceForLuxRoom.foodDelivery(luxRoom);
+
+        // StandardRoom stdRoom = new StandardRoom();
+        // LuxHotelRoomService<StandardRoom> serviceForStandardRoom = new LuxHotelRoomService<>();
+        // serviceForStandardRoom.reserve(stdRoom);
     }
 }
